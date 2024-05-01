@@ -5,10 +5,10 @@ namespace App\Controllers\Api\V2;
 use CodeIgniter\RESTful\ResourceController;
 
 
-class Cars extends ResourceController
+class Todos extends ResourceController
 {
 
-    protected $modelName = 'App\Models\CarModel';
+    protected $modelName = 'App\Models\todoModel';
     protected $format = 'json';
 
     protected $config = null;
@@ -18,13 +18,13 @@ class Cars extends ResourceController
      */
     public function __construct() {
 
-        // Load custom config: Cars
-        $this->config = config('Cars');
+        // Load custom config: Todos
+        $this->config = config('Todos');
 
     }
 
     /**
-     * Get all cars
+     * Get all todos
      *
      * @return \CodeIgniter\HTTP\ResponseInterface
      */
@@ -46,7 +46,7 @@ class Cars extends ResourceController
     }
 
     /**
-     * Get single car with specific ID
+     * Get single todo with specific ID
      *
      * @return \CodeIgniter\HTTP\ResponseInterface
      */
@@ -58,14 +58,14 @@ class Cars extends ResourceController
 
             if (!empty($data)) {
 
-                if ($this->config->show_car_types) {
+                if ($this->config->show_todo_types) {
 
-                    if (!empty($data['car_type_id'])
+                    if (!empty($data['todo_type_id'])
                          && 
-                        isset($this->config->car_types[$data['car_type_id']])
+                        isset($this->config->todo_types[$data['todo_type_id']])
                         ) {
                             
-                        $data['car_type'] = $this->config->car_types[$data['car_type_id']];
+                        $data['todo_type'] = $this->config->todo_types[$data['todo_type_id']];
 
                     }
 
