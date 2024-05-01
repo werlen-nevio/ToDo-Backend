@@ -4,6 +4,7 @@ ToDo-Backend
 ## Projekt ausführen
 <details closed>
     <summary>Projekt ausführen</summary>
+    
     copy env .env
 
     composer install
