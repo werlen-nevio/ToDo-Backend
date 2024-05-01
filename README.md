@@ -4,20 +4,18 @@ ToDo-Backend
 ## Projekt ausführen
 <details closed>
     <summary>Projekt ausführen</summary>
+    
+    copy env .env
 
-    Projekt klonen
+    composer install
 
-    - copy env .env
+    composer update
 
-    - composer install
+    php spark db:create cars
 
-    - composer update
+    php spark migrate
 
-    - php spark db:create cars
+    php spark db:seed cars
 
-    - php spark migrate
-
-    - php spark db:seed cars
-
-    - php spark serve
+    php spark serve
 </details>
