@@ -8,7 +8,7 @@ use CodeIgniter\RESTful\ResourceController;
 class Cars extends ResourceController
 {
 
-    protected $modelName = 'App\Models\Cars';
+    protected $modelName = 'App\Models\CarModel';
     protected $format = 'json';
 
     protected $config = null;
