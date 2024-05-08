@@ -18,4 +18,7 @@ $routes->resource('api/v1/cars');
 
 $routes->resource('api/v2/cars', ['filter' => 'check_api_key']);
 
+
+service('auth')->routes($routes);
+
 // $routes->put('api/(:segment )/(:any)', 'Api::update/$1/$2');
