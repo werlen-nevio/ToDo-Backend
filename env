@@ -55,6 +55,8 @@ CI_ENVIRONMENT = development
 
 # encryption.key =
 
+authjwt.keys.default.0.secret = zPWUOyj9GYJnj2OruqI/D3t6jxq0tBEi4OPasT5ibNo=
+
 #--------------------------------------------------------------------
 # SESSION
 #--------------------------------------------------------------------
