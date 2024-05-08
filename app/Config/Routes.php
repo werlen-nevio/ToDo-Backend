@@ -18,6 +18,7 @@ $routes->resource('api/v1/cars');
 
 $routes->resource('api/v2/cars', ['filter' => 'check_api_key']);
 
+$routes->post('auth/jwt', '\App\Controllers\Auth\LoginController::jwtLogin');
 
 service('auth')->routes($routes);
 
