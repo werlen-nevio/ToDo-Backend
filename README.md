@@ -11,11 +11,11 @@ ToDo-Backend
 
     composer update
 
-    php spark db:create cars
+    php spark db:create todos
 
     php spark migrate
 
-    php spark db:seed cars
+    php spark db:seed todos
 
     php spark shield:setup
     --n

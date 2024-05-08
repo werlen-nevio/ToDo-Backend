@@ -4,16 +4,16 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class CarModel extends Model
+class ToDoModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'cars';
+    protected $table            = 'todos';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = ['car_brand', 'car_name', 'color_hex', 'comments', 'car_type_id'];
+    protected $allowedFields    = ['todo_brand', 'todo_name', 'color_hex', 'comments', 'todo_type_id'];
 
         // Dates
         protected $useTimestamps = true;
@@ -24,11 +24,11 @@ class CarModel extends Model
     
         // Validation
         protected $validationRules = [
-            'car_brand'     => 'required|alpha_numeric_space|min_length[2]',
-            'car_name'      => 'required|alpha_numeric_space',
+            'todo_brand'     => 'required|alpha_numeric_space|min_length[2]',
+            'todo_name'      => 'required|alpha_numeric_space',
             'color_hex'     => 'permit_empty|exact_length[6]|hex',
             'comments'      => 'permit_empty|alpha_numeric_punct',
-            'car_type_id'   => 'required|is_natural_no_zero'
+            'todo_type_id'   => 'required|is_natural_no_zero'
         ];
         
         protected $validationMessages   = [];
@@ -78,9 +78,9 @@ class CarModel extends Model
                 $builder->orderBy($filter['order']);
             }
     
-            // Check specific: car_type_id
-            if (!empty($filter['car_type_id'])) {
-                $builder->where('car_type_id', $filter['car_type_id']);
+            // Check specific: todo_type_id
+            if (!empty($filter['todo_type_id'])) {
+                $builder->where('todo_type_id', $filter['todo_type_id']);
             }
     
             // Get data

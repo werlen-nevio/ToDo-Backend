@@ -4,9 +4,9 @@ namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
 
-class Cars extends BaseConfig
+class ToDos extends BaseConfig
 {
-    public $car_types = [
+    public $todo_types = [
         1 => 'Coupe',
         2 => 'Cabriolet',
         3 => 'Limousine',
@@ -15,5 +15,5 @@ class Cars extends BaseConfig
         6 => 'SUV',
     ];
 
-    public $show_car_type = true;
+    public $show_todo_type = true;
 }
