@@ -17,5 +17,11 @@ ToDo-Backend
 
     php spark db:seed cars
 
+    php spark shield:setup
+    --n
+    --n
+    --n
+    --y
+
     php spark serve
 </details>
