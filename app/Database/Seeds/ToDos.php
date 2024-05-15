@@ -10,63 +10,32 @@ class ToDos extends Seeder
     {
         $exampleData = [
             [
-                // Todo
-                'todo_id'           => 1,
-                'todo_name'         => 'Hausaufgaben machen',
-                'todo_description'  => 'md. 395 Datenbank erstellen',
-                'todo_date'         => '02.05.2024',
-                'todo_status'       => 'offen',
-                // Category Connection
-                'todo_category'     => 'Schule',
-                // Category
-                'category_id'       => '1',
-                'category_name'     => 'Schule',
-                // Key
-                'key_id'            => '1',
-                'person'            => 'Max Mustermann',
-                'key_name'          => 'schule_01',
-                'created_at'        => date('Y-m-d H:i:s'),
-                'valid_until'       => date('Y-m-d H:i:s'),
-                // Log
-                'date'              => '01.05.2024',
-                //'key_id'            => '', foreign key from key
-                'action'            => '',
-                'table'             => '',
-                'data_json_old'     => '',
-                'data_json_new'     => '',
-
-                //'updated_at'    => date('Y-m-d H:i:s')
+                'todo_brand'     => 'Porsche',
+                'todo_name'      => '911 GT3',
+                'color_hex'     => '93065b',
+                'comments'      => '',
+                'todo_type_id'   => 1,
+                'created_at'    => date('Y-m-d H:i:s'),
+                'updated_at'    => date('Y-m-d H:i:s')
             ],
-
             [
-                // Todo
-                'todo_id'           => 2,
-                'todo_name'         => 'Hausaufgaben machen',
-                'todo_description'  => 'md. 322 Persona erstellen',
-                'todo_date'         => '03.05.2024',
-                'todo_status'       => 'erldedigt',
-                // Category Connection
-                'todo_category'     => 'Schule',
-                // Category
-                'category_id'       => '2',
-                'category_name'     => 'Schule',
-                // Key
-                'key_id'            => '2',
-                'person'            => 'Max Mustermann',
-                'key_name'          => 'schule_02',
-                'created_at'        => date('Y-m-d H:i:s'),
-                'valid_until'       => date('Y-m-d H:i:s'),
-                // Log
-                'date'              => '02.05.2024',
-                //'key_id'            => '', foreign key from key
-                'action'            => '',
-                'table'             => '',
-                'data_json_old'     => '',
-                'data_json_new'     => '',
-
-                //'updated_at'    => date('Y-m-d H:i:s')
+                'todo_brand'     => 'Audi',
+                'todo_name'      => 'TT RS',
+                'color_hex'     => 'FFFFFF',
+                'comments'      => '',
+                'todo_type_id'   => 2,
+                'created_at'    => date('Y-m-d H:i:s'),
+                'updated_at'    => date('Y-m-d H:i:s')
+            ],
+            [
+                'todo_brand'     => 'BMW',
+                'todo_name'      => 'M3 Competition',
+                'color_hex'     => 'FF0000',
+                'comments'      => '',
+                'todo_type_id'   => 3,
+                'created_at'    => date('Y-m-d H:i:s'),
+                'updated_at'    => date('Y-m-d H:i:s')
             ]
-            
         ];
 
         $ToDoModel = new \App\Models\ToDoModel();
