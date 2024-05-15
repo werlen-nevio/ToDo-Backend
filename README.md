@@ -25,3 +25,11 @@ ToDo-Backend
 
     php spark serve
 </details>
+
+## Actions
+<details closed>
+    <summary>FTP Deploy</summary>
+    Wir haben FTP Deploy verwendet, um automatisch die commits auf den FTP Server zu pushen
+    
+    https://github.com/marketplace/actions/ftp-deploy
+</details>
