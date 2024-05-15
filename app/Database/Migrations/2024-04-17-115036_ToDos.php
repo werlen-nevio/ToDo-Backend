@@ -15,9 +15,12 @@ class ToDos extends Migration
 		todo_description TEXT,
 		todo_date DATETIME,
 		todo_status VARCHAR(255),
+
 		todo_category VARCHAR(255),
+
 		category_id INT(11) NOT NULL AUTO_INCREMENT,
 		category_name VARCHAR(255),		
+		
 		date DATETIME,
 		action VARCHAR(255),
 		table VARCHAR(255),
