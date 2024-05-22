@@ -14,7 +14,7 @@ class CreateToDoTables extends Migration
             Bezeichnung NVARCHAR(255),
             Beschreibung NVARCHAR(255),
             Datum DATETIME,
-            Status INT,
+            Status INT(11),
             PRIMARY KEY (ToDoID)
         )');
 
@@ -33,6 +33,16 @@ class CreateToDoTables extends Migration
             PRIMARY KEY (ID),
             FOREIGN KEY (ToDoID) REFERENCES ToDo(ToDoID),
             FOREIGN KEY (KategorieID) REFERENCES Kategorie(KategorieID)
+        )');
+
+        // Create Log table
+        $this->db->query('CREATE TABLE Log (
+            Datum DATETIME,
+            KeyID INT(11),
+            Aktion INT(11),
+            Tabelle INT(11),
+            DataJSON_Old NVARCHAR(255),
+            DataJSON_New NVARCHAR(255)
         )');
     }
 
