@@ -4,34 +4,43 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class ToDos extends Migration
+class CreateToDoTables extends Migration
 {
     public function up()
     {
+        // Create ToDo table
+        $this->db->query('CREATE TABLE ToDo (
+            ToDoID INT(11) NOT NULL AUTO_INCREMENT,
+            Bezeichnung NVARCHAR(255),
+            Beschreibung NVARCHAR(255),
+            Datum DATETIME,
+            Status INT,
+            PRIMARY KEY (ToDoID)
+        )');
 
-		$this->db->query('CREATE TABLE todos (
-        todo_id INT(11) NOT NULL AUTO_INCREMENT,
-		todo_name VARCHAR(255),
-		todo_description TEXT,
-		todo_date DATETIME,
-		todo_status VARCHAR(255),
+        // Create Kategorie table
+        $this->db->query('CREATE TABLE Kategorie (
+            KategorieID INT(11) NOT NULL AUTO_INCREMENT,
+            Bezeichnung NVARCHAR(255),
+            PRIMARY KEY (KategorieID)
+        )');
 
-		todo_category VARCHAR(255),
-
-		category_id INT(11) NOT NULL AUTO_INCREMENT,
-		category_name VARCHAR(255),		
-		
-		date DATETIME,
-		action VARCHAR(255),
-		table VARCHAR(255),
-		data_json_old VARCHAR(255),
-		data_json_new VARCHAR(255),
-    }
-	)');
+        // Create KategorieConn table
+        $this->db->query('CREATE TABLE KategorieConn (
+            ID INT(11) NOT NULL AUTO_INCREMENT,
+            ToDoID INT(11),
+            KategorieID INT(11),
+            PRIMARY KEY (ID),
+            FOREIGN KEY (ToDoID) REFERENCES ToDo(ToDoID),
+            FOREIGN KEY (KategorieID) REFERENCES Kategorie(KategorieID)
+        )');
     }
 
     public function down()
     {
-        //
+        // Drop tables in reverse order to maintain foreign key constraints
+        $this->db->query('DROP TABLE IF EXISTS KategorieConn');
+        $this->db->query('DROP TABLE IF EXISTS Kategorie');
+        $this->db->query('DROP TABLE IF EXISTS ToDo');
     }
 }

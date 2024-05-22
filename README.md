@@ -9,13 +9,11 @@ ToDo-Backend
 
     composer install
 
-    composer update
-
     php spark db:create todos
 
     php spark migrate
 
-    php spark db:seed todos
+    php spark db:seed TodoSeeder
 
     php spark shield:setup
     --n
