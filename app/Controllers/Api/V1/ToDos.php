@@ -155,4 +155,24 @@ class ToDos extends ResourceController
 
         return $this->respondCreated($todo);
     }
+
+    /**
+     * Delete a todo by ID
+     *
+     * @param int|null $id
+     * @return \CodeIgniter\HTTP\ResponseInterface
+     */
+    public function delete($id = null)
+    {
+        // Check if the todo exists
+        $todo = $this->model->find($id);
+        if ($todo) {
+            // Delete related conns from kategorieconn
+            $this->model->db->table('kategorieconn')->where('ToDoID', $id)->delete();
+            // Delete the todo
+            $this->model->delete($id);
+            return $this->respondDeleted(['message' => 'Todo deleted successfully']);
+        }
+        return $this->failNotFound('Todo not found');
+    }
 }
