@@ -15,8 +15,33 @@ class Categories extends ResourceController
      */
     public function index()
     {
-        $categories = $this->model->findAll();
-        return $this->respond($categories);
+        $limit = $this->request->getGet('limit') ?? 10; // limit
+        $page = $this->request->getGet('page') ?? 1; // page
+        $orderBy = $this->request->getGet('order_by') ?? 'KategorieID'; // order by
+        $orderDirection = $this->request->getGet('order_direction') ?? 'asc'; // order direction
+
+        $offset = ($page - 1) * $limit;
+
+        $query = $this->model
+                      ->orderBy($orderBy, $orderDirection);
+
+        // Fetch categories with pagination and sorting
+        $categories = $query->findAll($limit, $offset);
+
+        // Get total number of categories
+        $total = $this->model->countAllResults(false);
+
+        $response = [
+            'data' => $categories,
+            'pagination' => [
+                'total' => $total,
+                'limit' => (int) $limit,
+                'page' => (int) $page,
+                'total_pages' => ceil($total / $limit),
+            ]
+        ];
+
+        return $this->respond($response);
     }
 
     /**
@@ -41,40 +66,23 @@ class Categories extends ResourceController
      */
     public function create()
     {
-        $data = $this->request->getPost();
-        if ($this->model->insert($data)) {
-            return $this->respondCreated($data);
-        }
-        return $this->failValidationErrors($this->model->errors());
-    }
+        $data = $this->request->getJSON(true);
 
-    /**
-     * Update an existing category
-     *
-     * @param int|null $id
-     * @return \CodeIgniter\HTTP\ResponseInterface
-     */
-    public function update($id = null)
-    {
-        $data = $this->request->getRawInput();
-        if ($this->model->update($id, $data)) {
-            return $this->respond($data);
+        // Validate data
+        if (!$this->validate([
+            'Bezeichnung' => 'required|max_length[255]',
+        ])) {
+            return $this->fail($this->validator->getErrors());
         }
-        return $this->failValidationErrors($this->model->errors());
-    }
 
-    /**
-     * Delete a category
-     *
-     * @param int|null $id
-     * @return \CodeIgniter\HTTP\ResponseInterface
-     */
-    public function delete($id = null)
-    {
-        if ($this->model->find($id)) {
-            $this->model->delete($id);
-            return $this->respondDeleted(['id' => $id, 'message' => 'Category deleted']);
+        // Add new category
+        $categoryId = $this->model->insert($data);
+        if ($categoryId === false) {
+            return $this->failServerError('Failed to create category');
         }
-        return $this->failNotFound('Category not found');
+
+        $category = $this->model->find($categoryId);
+
+        return $this->respondCreated($category);
     }
 }

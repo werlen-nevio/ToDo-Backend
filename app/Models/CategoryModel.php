@@ -9,7 +9,7 @@ class CategoryModel extends Model
     protected $table = 'kategorie';
     protected $primaryKey = 'KategorieID';
     protected $allowedFields = [
-        'bezeichnung'
+        'Bezeichnung'
     ];
     protected $returnType = 'array';
     // protected $useTimestamps = true;
