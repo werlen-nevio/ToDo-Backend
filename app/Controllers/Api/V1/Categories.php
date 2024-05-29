@@ -83,4 +83,65 @@ class Categories extends ResourceController
 
         return $this->respondCreated($category);
     }
+
+    /**
+     * Delete a todo by ID
+     *
+     * @param int|null $id
+     * @return \CodeIgniter\HTTP\ResponseInterface
+     */
+    public function delete($id = null)
+    {
+        // Check if the todo exists
+        $todo = $this->model->find($id);
+        if ($todo) {
+            // Delete related conns from kategorieconn
+            $this->model->db->table('kategorieconn')->where('ToDoID', $id)->delete();
+            // Delete the todo
+            $this->model->delete($id);
+            return $this->respondDeleted(['message' => 'Todo deleted successfully']);
+        }
+        return $this->failNotFound('Todo not found');
+    }
+
+/**
+ * Update a category by ID
+ *
+ * @param int|null $id
+ * @return \CodeIgniter\HTTP\ResponseInterface
+ */
+public function update($id = null)
+{
+    // Check if the category exists
+    $category = $this->model->find($id);
+    if (!$category) {
+        return $this->failNotFound('Category not found');
+    }
+
+    $data = $this->request->getJSON(true);
+
+    // Manually check if 'Bezeichnung' is provided
+    if (!isset($data['Bezeichnung'])) {
+        return $this->failValidationError('Bezeichnung must be provided');
+    }
+
+    // Prepare validation rules
+    $validationRules = [
+        'Bezeichnung' => 'max_length[255]'
+    ];
+
+    // Validate the provided data
+    if (!$this->validate($validationRules)) {
+        return $this->fail($this->validator->getErrors());
+    }
+
+    // Update category
+    if (!$this->model->update($id, $data)) {
+        return $this->failServerError('Failed to update category');
+    }
+
+    $category = $this->model->find($id);
+    
+    return $this->respond($category);
+}
 }
