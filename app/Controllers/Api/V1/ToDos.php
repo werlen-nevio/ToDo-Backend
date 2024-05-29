@@ -155,4 +155,108 @@ class ToDos extends ResourceController
 
         return $this->respondCreated($todo);
     }
+
+    /**
+     * Delete a todo by ID
+     *
+     * @param int|null $id
+     * @return \CodeIgniter\HTTP\ResponseInterface
+     */
+    public function delete($id = null)
+    {
+        // Check if the todo exists
+        $todo = $this->model->find($id);
+        if ($todo) {
+            // Delete related conns from kategorieconn
+            $this->model->db->table('kategorieconn')->where('ToDoID', $id)->delete();
+            // Delete the todo
+            $this->model->delete($id);
+            return $this->respondDeleted(['message' => 'Todo deleted successfully']);
+        }
+        return $this->failNotFound('Todo not found');
+    }
+
+/**
+ * Update a todo by ID (partial update)
+ *
+ * @param int|null $id
+ * @return \CodeIgniter\HTTP\ResponseInterface
+ */
+public function update($id = null)
+{
+    if (!$this->model->find($id)) {
+        return $this->failNotFound('Todo not found');
+    }
+
+    $data = $this->request->getJSON(true);
+
+    // Manually check if 'categories' is an array if provided
+    if (isset($data['categories']) && !is_array($data['categories'])) {
+        return $this->failValidationError('Categories must be an array');
+    }
+
+    // Extract categories if present
+    $categories = isset($data['categories']) ? $data['categories'] : null;
+    unset($data['categories']);
+
+    // Prepare validation rules, only add rules for fields that are present in the request
+    $validationRules = [];
+    if (isset($data['Bezeichnung'])) {
+        $validationRules['Bezeichnung'] = 'max_length[255]';
+    }
+    if (isset($data['Beschreibung'])) {
+        $validationRules['Beschreibung'] = 'max_length[255]';
+    }
+    if (isset($data['Datum'])) {
+        $validationRules['Datum'] = 'valid_date[Y-m-d H:i:s]';
+    }
+    if (isset($data['Status'])) {
+        $validationRules['Status'] = 'in_list[0,1]';
+    }
+
+    // Validate the provided data
+    if (!empty($validationRules) && !$this->validate($validationRules)) {
+        return $this->fail($this->validator->getErrors());
+    }
+
+    // Update todo, only with provided data
+    if (!empty($data) && !$this->model->update($id, $data)) {
+        return $this->failServerError('Failed to update todo');
+    }
+
+    // Update categories in kategorieconn if provided
+    if ($categories !== null) {
+        $kategorieconnTable = $this->model->db->table('kategorieconn');
+        $kategorieconnTable->where('ToDoID', $id)->delete();
+        if (!empty($categories)) {
+            foreach ($categories as $categoryId) {
+                $kategorieconnTable->insert([
+                    'ToDoID' => $id,
+                    'KategorieID' => $categoryId
+                ]);
+            }
+        }
+    }
+
+    $todo = $this->model->find($id);
+    // Add the categories to the response
+    if ($categories !== null) {
+        $todo['categories'] = $categories;
+    } else {
+        // Fetch current categories if not provided in the request
+        $categoriesQuery = $this->model->db->table('kategorieconn')
+            ->select('KategorieID')
+            ->where('ToDoID', $id)
+            ->get();
+
+        $currentCategories = [];
+        foreach ($categoriesQuery->getResultArray() as $row) {
+            $currentCategories[] = $row['KategorieID'];
+        }
+        $todo['categories'] = $currentCategories;
+    }
+
+    return $this->respond($todo);
+}
+
 }
