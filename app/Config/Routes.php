@@ -14,9 +14,9 @@ $routes->set404Override();
 
 $routes->get('/', 'Home::index');
 
-$routes->resource('api/v1/todos');
+$routes->resource('Api/V1/ToDos');
 
-$routes->resource('api/v1/categories');
+$routes->resource('Api/V1/Categories');
 
 $routes->post('auth/jwt', '\App\Controllers\Auth\LoginController::jwtLogin');
 
