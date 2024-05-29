@@ -17,16 +17,14 @@ class Categories extends ResourceController
     {
         $limit = $this->request->getGet('limit') ?? 10; // limit
         $page = $this->request->getGet('page') ?? 1; // page
-        $orderBy = $this->request->getGet('order_by') ?? 'KategorieID'; // order by
-        $orderDirection = $this->request->getGet('order_direction') ?? 'asc'; // order direction
 
         $offset = ($page - 1) * $limit;
 
-        $query = $this->model
-                      ->orderBy($orderBy, $orderDirection);
+        $query = $this->model;
 
-        // Fetch categories with pagination and sorting
+        // Fetch categories with pagination (without sorting)
         $categories = $query->findAll($limit, $offset);
+
 
         // Get total number of categories
         $total = $this->model->countAllResults(false);
