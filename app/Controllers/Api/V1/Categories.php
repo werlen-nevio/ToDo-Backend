@@ -78,12 +78,12 @@ class Categories extends ResourceController
         }
 
         // Add new category
-        $categoryId = $this->model->insert($data);
-        if ($categoryId === false) {
+        $KategorieID = $this->model->insert($data);
+        if ($KategorieID === false) {
             return $this->failServerError('Failed to create category');
         }
 
-        $category = $this->model->find($categoryId);
+        $category = $this->model->find($KategorieID);
 
         return $this->respondCreated($category);
     }
@@ -100,7 +100,7 @@ class Categories extends ResourceController
         $category = $this->model->find($id);
         if ($category) {
             // Delete related conns from kategorieconn
-            $this->model->db->table('kategorieconn')->where('categoryID', $id)->delete();
+            $this->model->db->table('kategorieconn')->where('KategorieID', $id)->delete();
             // Delete the category
             $this->model->delete($id);
             return $this->respondDeleted(['message' => 'category deleted successfully']);
