@@ -89,23 +89,23 @@ class Categories extends ResourceController
     }
 
     /**
-     * Delete a todo by ID
+     * Delete a category by ID
      *
      * @param int|null $id
      * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function delete($id = null)
     {
-        // Check if the todo exists
-        $todo = $this->model->find($id);
-        if ($todo) {
+        // Check if the category exists
+        $category = $this->model->find($id);
+        if ($category) {
             // Delete related conns from kategorieconn
-            $this->model->db->table('kategorieconn')->where('ToDoID', $id)->delete();
-            // Delete the todo
+            $this->model->db->table('kategorieconn')->where('categoryID', $id)->delete();
+            // Delete the category
             $this->model->delete($id);
-            return $this->respondDeleted(['message' => 'Todo deleted successfully']);
+            return $this->respondDeleted(['message' => 'category deleted successfully']);
         }
-        return $this->failNotFound('Todo not found');
+        return $this->failNotFound('category not found');
     }
 
 /**
