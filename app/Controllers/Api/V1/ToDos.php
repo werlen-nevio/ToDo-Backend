@@ -103,4 +103,56 @@ class ToDos extends ResourceController
         }
         return $this->failNotFound('Todo not found');
     }
+
+    /**
+     * Create a new todo
+     *
+     * @return \CodeIgniter\HTTP\ResponseInterface
+     */
+    public function create()
+    {
+        $data = $this->request->getJSON(true);
+
+        // Manually check if 'categories' is an array if provided
+        if (isset($data['categories']) && !is_array($data['categories'])) {
+            return $this->failValidationError('Categories must be an array');
+        }
+
+        // Validate other data
+        if (!$this->validate([
+            'Bezeichnung' => 'required|max_length[255]',
+            'Beschreibung' => 'max_length[255]',
+            'Datum' => 'required|valid_date[Y-m-d H:i:s]',
+            'Status' => 'required|in_list[0,1]'
+        ])) {
+            return $this->fail($this->validator->getErrors());
+        }
+
+        // Extract categories if present
+        $categories = isset($data['categories']) ? $data['categories'] : [];
+        unset($data['categories']);
+
+        // Add new todo
+        $todoId = $this->model->insert($data);
+        if ($todoId === false) {
+            return $this->failServerError('Failed to create todo');
+        }
+
+        // Insert categories into kategorieconn if provided
+        if (!empty($categories)) {
+            $kategorieconnTable = $this->model->db->table('kategorieconn');
+            foreach ($categories as $categoryId) {
+                $kategorieconnTable->insert([
+                    'ToDoID' => $todoId,
+                    'KategorieID' => $categoryId
+                ]);
+            }
+        }
+
+        $todo = $this->model->find($todoId);
+        // Add the categories to the response
+        $todo['categories'] = $categories;
+
+        return $this->respondCreated($todo);
+    }
 }
