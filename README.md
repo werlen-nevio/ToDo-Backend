@@ -54,21 +54,21 @@ Die Dokumentation der Tests finden Sie hier:
 @tholz88 - Holzer Tobias
 
 ## ToDo's
-- [x]API Dokumentation
-- [ ]Persönliches Feedback zu Projektarbeit
-- [ ]ERD & Dokumentation DB-Modell
-- [x]Korrekte Datenfelder & Beziehungen
-- [x]Migration-Script
-- [x]Seed-Skripts
-- [x]API für "TODO Aufgaben" und "TODO Kategorien"
-- [x]Datenübergabe per JSON
-- [x]Rückgabewert per JSON
-- [x]GET-Request haben zusätzliche Möglichkeiten die als Zusatzparameter per URL definiert werden können
-- [x]HTTP Anfragen (GET, POST, PUT/PATCH, DELETE)
-- [x]Korrekte Prüfung der Daten
-- [x]Zugriff auf API nur mit gültigem API-Key
-- [x]Authentifizierung mittels JWT
-- [ ]Log-File
-- [ ]Unit Tests
-- [ ]Dokumentation der Tests
-- [ ]E-Mail senden (Zusatzfunktion)
+- [x] API Dokumentation
+- [ ] Persönliches Feedback zu Projektarbeit
+- [ ] ERD & Dokumentation DB-Modell
+- [x] Korrekte Datenfelder & Beziehungen
+- [x] Migration-Script
+- [x] Seed-Skripts
+- [x] API für "TODO Aufgaben" und "TODO Kategorien"
+- [x] Datenübergabe per JSON
+- [x] Rückgabewert per JSON
+- [x] GET-Request haben zusätzliche Möglichkeiten die als Zusatzparameter per URL definiert werden können
+- [x] HTTP Anfragen (GET, POST, PUT/PATCH, DELETE)
+- [x] Korrekte Prüfung der Daten
+- [x] Zugriff auf API nur mit gültigem API-Key
+- [x] Authentifizierung mittels JWT
+- [ ] Log-File
+- [ ] Unit Tests
+- [ ] Dokumentation der Tests
+- [ ] E-Mail senden (Zusatzfunktion)
