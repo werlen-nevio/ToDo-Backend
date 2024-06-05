@@ -69,7 +69,7 @@ Die Dokumentation der Tests finden Sie hier:
 - [x] Korrekte Prüfung der Daten
 - [x] Zugriff auf API nur mit gültigem API-Key
 - [x] Authentifizierung mittels JWT
-- [ ] Log-File
+- [x] Log-File
 - [ ] Unit Tests
 - [ ] Dokumentation der Tests
 - [ ] E-Mail senden (Zusatzfunktion)
