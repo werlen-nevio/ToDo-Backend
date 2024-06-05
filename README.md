@@ -7,6 +7,8 @@ ToDo-Backend
     
     copy env .env
 
+    copy phpunit.xml.dist phpunit.xml
+
     composer install
 
     php spark db:create todos
@@ -39,7 +41,7 @@ Unser Feedback finden Sie hier:
 
 ## Tests
 Die Dokumentation der Tests finden Sie hier: 
-[Link]
+[Link](./Testing/README.md)
 
 ## Actions
 <details closed>
@@ -71,5 +73,5 @@ Die Dokumentation der Tests finden Sie hier:
 - [x] Authentifizierung mittels JWT
 - [x] Log-File
 - [x] Unit Tests
-- [ ] Dokumentation der Tests
+- [x] Dokumentation der Tests
 - [ ] E-Mail senden (Zusatzfunktion)
