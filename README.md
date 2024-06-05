@@ -26,15 +26,16 @@ ToDo-Backend
 
 ## Dokumentation
 Die Dokumentation finden Sie hier: 
-[Link](https://documenter.getpostman.com/view/32715719/2sA3QzZTRq#63616509-26fa-481d-aed0-7742caae67da)
+[Link](https://documenter.getpostman.com/view/32715719/2sA3QzZTRq)
 
 ## Entity-Relationship-Modell
 Unser ERD finden Sie hier:
-[Link](https://github.com/werlen-nevio/ToDo-Backend/blob/main/ERD/ERD.md)
+[Link](./ERD/ERD.md)
 
 ## Feedback
 Unser Feedback finden Sie hier:
-[Link]
+- Nevio: [Link](./Feedback/Feedback_Nevio.md)
+- Tobias: [Link](./Feedback/Feedback_Tobias.md)
 
 ## Tests
 Die Dokumentation der Tests finden Sie hier: 
