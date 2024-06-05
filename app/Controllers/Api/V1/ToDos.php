@@ -2,11 +2,18 @@
 namespace App\Controllers\Api\V1;
 
 use CodeIgniter\RESTful\ResourceController;
+use App\Models\LogModel;
 
 class ToDos extends ResourceController
 {
     protected $modelName = 'App\Models\ToDoModel';
     protected $format    = 'json';
+    protected $logModel;
+
+    public function __construct()
+    {
+        $this->logModel = new LogModel();
+    }
 
     /**
      * Get all todos with pagination and sorting
@@ -104,11 +111,20 @@ class ToDos extends ResourceController
         return $this->failNotFound('Todo not found');
     }
 
-    /**
-     * Create a new todo
-     *
-     * @return \CodeIgniter\HTTP\ResponseInterface
-     */
+    private function logAction($action, $todoId, $oldData = null, $newData = null)
+    {
+        $data = [
+            'Datum' => date('Y-m-d H:i:s'),
+            'KeyID' => $todoId,
+            'Aktion' => $action,
+            'Tabelle' => 1,
+            'DataJSON_Old' => $oldData ? json_encode($oldData) : null,
+            'DataJSON_New' => $newData ? json_encode($newData) : null
+        ];
+
+        $this->logModel->insert($data);
+    }
+
     public function create()
     {
         $data = $this->request->getJSON(true);
@@ -153,15 +169,12 @@ class ToDos extends ResourceController
         // Add the categories to the response
         $todo['categories'] = $categories;
 
+        // Log the creation
+        $this->logAction(2, $todoId, null, $todo);
+
         return $this->respondCreated($todo);
     }
 
-    /**
-     * Delete a todo by ID
-     *
-     * @param int|null $id
-     * @return \CodeIgniter\HTTP\ResponseInterface
-     */
     public function delete($id = null)
     {
         // Check if the todo exists
@@ -171,20 +184,19 @@ class ToDos extends ResourceController
             $this->model->db->table('kategorieconn')->where('ToDoID', $id)->delete();
             // Delete the todo
             $this->model->delete($id);
+
+            // Log the deletion
+            $this->logAction(1, $id, $todo);
+
             return $this->respondDeleted(['message' => 'Todo deleted successfully']);
         }
         return $this->failNotFound('Todo not found');
     }
 
-    /**
-     * Update a todo by ID (partial update)
-     *
-     * @param int|null $id
-     * @return \CodeIgniter\HTTP\ResponseInterface
-     */
     public function update($id = null)
     {
-        if (!$this->model->find($id)) {
+        $oldTodo = $this->model->find($id);
+        if (!$oldTodo) {
             return $this->failNotFound('Todo not found');
         }
 
@@ -238,10 +250,10 @@ class ToDos extends ResourceController
             }
         }
 
-        $todo = $this->model->find($id);
+        $newTodo = $this->model->find($id);
         // Add the categories to the response
         if ($categories !== null) {
-            $todo['categories'] = $categories;
+            $newTodo['categories'] = $categories;
         } else {
             // Fetch current categories if not provided in the request
             $categoriesQuery = $this->model->db->table('kategorieconn')
@@ -253,10 +265,12 @@ class ToDos extends ResourceController
             foreach ($categoriesQuery->getResultArray() as $row) {
                 $currentCategories[] = $row['KategorieID'];
             }
-            $todo['categories'] = $currentCategories;
+            $newTodo['categories'] = $currentCategories;
         }
 
-        return $this->respond($todo);
-    }
+        // Log the update
+        $this->logAction(3, $id, $oldTodo, $newTodo);
 
+        return $this->respond($newTodo);
+    }
 }

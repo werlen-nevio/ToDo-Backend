@@ -2,14 +2,21 @@
 namespace App\Controllers\Api\V1;
 
 use CodeIgniter\RESTful\ResourceController;
+use App\Models\LogModel;
 
 class Categories extends ResourceController
 {
     protected $modelName = 'App\Models\CategoryModel';
     protected $format    = 'json';
+    protected $logModel;
+
+    public function __construct()
+    {
+        $this->logModel = new LogModel();
+    }
 
     /**
-     * Get all Categories
+     * Get all Categories with pagination and sorting
      *
      * @return \CodeIgniter\HTTP\ResponseInterface
      */
@@ -26,9 +33,8 @@ class Categories extends ResourceController
                       ->orderBy($orderBy, $orderDirection)
                       ->select('kategorie.*');
 
-        // Fetch categories with pagination (without sorting)
+        // Fetch categories with pagination and sorting
         $categories = $query->findAll($limit, $offset);
-
 
         // Get total number of categories
         $total = $this->model->countAllResults(false);
@@ -85,6 +91,9 @@ class Categories extends ResourceController
 
         $category = $this->model->find($KategorieID);
 
+        // Log the creation
+        $this->logAction(2, $KategorieID, null, $category);
+
         return $this->respondCreated($category);
     }
 
@@ -103,49 +112,69 @@ class Categories extends ResourceController
             $this->model->db->table('kategorieconn')->where('KategorieID', $id)->delete();
             // Delete the category
             $this->model->delete($id);
-            return $this->respondDeleted(['message' => 'category deleted successfully']);
-        }
-        return $this->failNotFound('category not found');
-    }
 
-/**
- * Update a category by ID
- *
- * @param int|null $id
- * @return \CodeIgniter\HTTP\ResponseInterface
- */
-public function update($id = null)
-{
-    // Check if the category exists
-    $category = $this->model->find($id);
-    if (!$category) {
+            // Log the deletion
+            $this->logAction(1, $id, $category);
+
+            return $this->respondDeleted(['message' => 'Category deleted successfully']);
+        }
         return $this->failNotFound('Category not found');
     }
 
-    $data = $this->request->getJSON(true);
+    /**
+     * Update a category by ID
+     *
+     * @param int|null $id
+     * @return \CodeIgniter\HTTP\ResponseInterface
+     */
+    public function update($id = null)
+    {
+        $oldCategory = $this->model->find($id);
+        if (!$oldCategory) {
+            return $this->failNotFound('Category not found');
+        }
 
-    // Manually check if 'Bezeichnung' is provided
-    if (!isset($data['Bezeichnung'])) {
-        return $this->failValidationError('Bezeichnung must be provided');
+        $data = $this->request->getJSON(true);
+
+        // Manually check if 'Bezeichnung' is provided
+        if (!isset($data['Bezeichnung'])) {
+            return $this->failValidationError('Bezeichnung must be provided');
+        }
+
+        // Prepare validation rules
+        $validationRules = [
+            'Bezeichnung' => 'max_length[255]'
+        ];
+
+        // Validate the provided data
+        if (!$this->validate($validationRules)) {
+            return $this->fail($this->validator->getErrors());
+        }
+
+        // Update category
+        if (!$this->model->update($id, $data)) {
+            return $this->failServerError('Failed to update category');
+        }
+
+        $newCategory = $this->model->find($id);
+
+        // Log the update
+        $this->logAction(3, $id, $oldCategory, $newCategory);
+
+        return $this->respond($newCategory);
     }
 
-    // Prepare validation rules
-    $validationRules = [
-        'Bezeichnung' => 'max_length[255]'
-    ];
+    private function logAction($action, $categoryId, $oldData = null, $newData = null)
+    {
+        $data = [
+            'Datum' => date('Y-m-d H:i:s'),
+            'KeyID' => $categoryId,
+            'Aktion' => $action,
+            'Tabelle' => 2,
+            'DataJSON_Old' => $oldData ? json_encode($oldData) : null,
+            'DataJSON_New' => $newData ? json_encode($newData) : null
+        ];
 
-    // Validate the provided data
-    if (!$this->validate($validationRules)) {
-        return $this->fail($this->validator->getErrors());
+        $this->logModel->insert($data);
     }
-
-    // Update category
-    if (!$this->model->update($id, $data)) {
-        return $this->failServerError('Failed to update category');
-    }
-
-    $category = $this->model->find($id);
-    
-    return $this->respond($category);
-}
 }
