@@ -56,7 +56,7 @@ Die Dokumentation der Tests finden Sie hier:
 
 ## ToDo's
 - [x] API Dokumentation
-- [ ] Persönliches Feedback zu Projektarbeit
+- [x] Persönliches Feedback zu Projektarbeit
 - [x] ERD & Dokumentation DB-Modell
 - [x] Korrekte Datenfelder & Beziehungen
 - [x] Migration-Script
